@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BaniRifas | Rifas Online</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #101010;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    header {
+      padding: 28px 16px;
+      border-bottom: 1px solid #b99440;
+    }
+    h1 { color: #e6bf62; font-size: 38px; margin: 0; }
+    .subtitle { color: #ddd; }
+    main { max-width: 650px; margin: auto; padding: 25px 18px; }
+    .card {
+      background: #1d1d1d;
+      border: 1px solid #b99440;
+      border-radius: 18px;
+      padding: 25px 18px;
+    }
+    h2 { color: #e6bf62; }
+    .prize { padding: 10px; font-size: 18px; }
+    .price { font-size: 30px; color: #e6bf62; font-weight: bold; }
+    .bar {
+      height: 17px;
+      background: #444;
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+    .fill {
+      width: 0%;
+      height: 100%;
+      background: #d4af37;
+    }
+    button {
+      background: #d4af37;
+      color: #111;
+      border: 0;
+      border-radius: 10px;
+      padding: 15px 24px;
+      font-weight: bold;
+      font-size: 17px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 14px;
+    }
+    button:disabled {
+      background: #777;
+      cursor: not-allowed;
+    }
+    footer { padding: 25px; color: #aaa; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>✦ BaniRifas ✦</h1>
+    <p class="subtitle">Tu oportunidad de ganar en grande</p>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>¡PRÓXIMAMENTE!</h2>
+      <h2>iPhone 18 Pro Max</h2>
+
+      <div class="prize">🥇 Primer premio: iPhone 18 Pro Max</div>
+      <div class="prize">🥈 Segundo premio: RD$10,000</div>
+      <div class="prize">🥉 Tercer premio: RD$5,000</div>
+
+      <p>Precio por boleto</p>
+      <div class="price">RD$25</div>
+      <p>Compra mínima: 4 boletos</p>
+
+      <h3>Progreso de la rifa</h3>
+      <div class="bar"><div class="fill"></div></div>
+      <p>Ventas aún no iniciadas</p>
+
+      <button disabled>VENTAS PRÓXIMAMENTE</button>
+    </div>
+  </main>
+
+  <footer>
+    © 2026 BaniRifas · Todos los derechos reservados
+  </footer>
+</body>
+</html>
