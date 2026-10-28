@@ -173,7 +173,7 @@ if (!pedidos || pedidos.length === 0) {
 
 document.querySelector(".panel").appendChild(panel);
 formulario.style.display = "none";
-        
+     console.log("BANIRIFAS: iniciando carga de pagos");   
 const { data: pagos, error: errorPagos } =
   await supabase.rpc("listar_pagos_banirifas");
 
