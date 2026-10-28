@@ -122,6 +122,58 @@
         mensaje.textContent =
           "Acceso administrativo confirmado.";
         formulario.reset();
+        
+const { data: pedidos, error: errorPedidos } =
+  await supabase.rpc("listar_pedidos_banirifas");
+
+if (errorPedidos) {
+  mensaje.textContent =
+    "Acceso confirmado, pero no se pudieron cargar los pedidos.";
+  return;
+}
+
+const panel = document.createElement("section");
+panel.style.marginTop = "25px";
+
+const titulo = document.createElement("h2");
+titulo.textContent = "Pedidos registrados";
+titulo.style.color = "#d8b75b";
+panel.appendChild(titulo);
+
+if (!pedidos || pedidos.length === 0) {
+  const vacio = document.createElement("p");
+  vacio.textContent = "Todavía no hay pedidos.";
+  panel.appendChild(vacio);
+} else {
+  pedidos.forEach((pedido) => {
+    const tarjeta = document.createElement("div");
+    tarjeta.style.cssText =
+      "padding:15px;margin-top:12px;background:#292929;" +
+      "border-radius:8px;border:1px solid #555;";
+
+    const datos = [
+      ["Rifa", pedido.rifa],
+      ["Cliente", pedido.cliente],
+      ["Boletos", pedido.cantidad_boletos],
+      ["Importe", "RD$" + pedido.importe],
+      ["Pedido", pedido.estado_pedido],
+      ["Pago", pedido.estado_pago || "Sin registrar"]
+    ];
+
+    datos.forEach(([etiqueta, valor]) => {
+      const linea = document.createElement("p");
+      linea.style.textAlign = "left";
+      linea.textContent = etiqueta + ": " + valor;
+      tarjeta.appendChild(linea);
+    });
+
+    panel.appendChild(tarjeta);
+  });
+}
+
+document.querySelector(".panel").appendChild(panel);
+formulario.style.display = "none";
+
 
       } catch (error) {
         mensaje.textContent =
