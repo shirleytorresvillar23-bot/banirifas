@@ -1,1 +1,136 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administración | BaniRifas</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #101010;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .panel {
+      width: 100%;
+      max-width: 390px;
+      padding: 32px;
+      background: #1b1b1b;
+      border: 1px solid #b99a48;
+      border-radius: 18px;
+    }
+    h1 {
+      color: #d8b75b;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    p { text-align: center; color: #bbb; }
+    label { display: block; margin-top: 18px; }
+    input {
+      width: 100%;
+      padding: 13px;
+      margin-top: 7px;
+      border: 1px solid #555;
+      border-radius: 8px;
+      background: #292929;
+      color: white;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 24px;
+      border: 0;
+      border-radius: 8px;
+      background: #d8b75b;
+      color: #111;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .6; }
+    #mensaje { margin-top: 18px; }
+  </style>
+</head>
+<body>
+  <main class="panel">
+    <h1>BANIRIFAS</h1>
+    <p>Acceso administrativo</p>
+
+    <form id="login">
+      <label for="correo">Correo electrónico</label>
+      <input id="correo" type="email" required
+             autocomplete="username">
+
+      <label for="clave">Contraseña</label>
+      <input id="clave" type="password" required
+             autocomplete="current-password">
+
+      <button id="entrar" type="submit">
+        Iniciar sesión
+      </button>
+    </form>
+
+    <p id="mensaje" role="status"></p>
+  </main>
+
+  <script type="module">
+    import { createClient } from
+      "https://esm.sh/@supabase/supabase-js@2";
+
+    const supabase = createClient(
+      "https://hoscqebehcuwemaiifav.supabase.co",
+      "sb_publishable_4kuB8_WytXyHsWDSk7XxBA_xh7tk83q"
+    );
+
+    const formulario = document.querySelector("#login");
+    const mensaje = document.querySelector("#mensaje");
+    const boton = document.querySelector("#entrar");
+
+    formulario.addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+      boton.disabled = true;
+      mensaje.textContent = "Verificando acceso...";
+
+      const email = document.querySelector("#correo").value;
+      const password = document.querySelector("#clave").value;
+
+      try {
+        const { error } =
+          await supabase.auth.signInWithPassword({
+            email,
+            password
+          });
+
+        if (error) throw error;
+
+        const { data, error: permisoError } =
+          await supabase.rpc("es_admin_banirifas");
+
+        if (permisoError) throw permisoError;
+
+        if (data !== true) {
+          await supabase.auth.signOut();
+          mensaje.textContent = "Acceso no autorizado.";
+          return;
+        }
+
+        mensaje.textContent =
+          "Acceso administrativo confirmado.";
+        formulario.reset();
+
+      } catch (error) {
+        mensaje.textContent =
+          "No se pudo iniciar sesión. Verifica tus datos.";
+      } finally {
+        boton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
+
