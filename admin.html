@@ -173,6 +173,67 @@ if (!pedidos || pedidos.length === 0) {
 
 document.querySelector(".panel").appendChild(panel);
 formulario.style.display = "none";
+        
+const { data: pagos, error: errorPagos } =
+  await supabase.rpc("listar_pagos_banirifas");
+
+const seccionPagos = document.createElement("section");
+seccionPagos.style.marginTop = "30px";
+
+const tituloPagos = document.createElement("h2");
+tituloPagos.textContent = "Pagos pendientes de revisión";
+tituloPagos.style.color = "#d8b75b";
+seccionPagos.appendChild(tituloPagos);
+
+if (errorPagos) {
+  const aviso = document.createElement("p");
+  aviso.textContent = "No se pudieron cargar los pagos.";
+  seccionPagos.appendChild(aviso);
+} else {
+  const pendientes = (pagos || []).filter(
+    pago => pago.estado_pago === "pending"
+  );
+
+  if (pendientes.length === 0) {
+    const aviso = document.createElement("p");
+    aviso.textContent = "No hay pagos pendientes.";
+    seccionPagos.appendChild(aviso);
+  }
+
+  pendientes.forEach((pago) => {
+    const tarjeta = document.createElement("div");
+    tarjeta.style.cssText =
+      "padding:15px;margin-top:12px;background:#292929;" +
+      "border:1px solid #555;border-radius:8px;";
+
+    const datos = [
+      ["Cliente", pago.cliente],
+      ["Rifa", pago.rifa],
+      ["Importe", "RD$" + pago.importe],
+      ["Estado", pago.estado_pago],
+      ["Comprobante", pago.comprobante || "No enviado"]
+    ];
+
+    datos.forEach(([etiqueta, valor]) => {
+      const linea = document.createElement("p");
+      linea.style.textAlign = "left";
+      linea.textContent = etiqueta + ": " + valor;
+      tarjeta.appendChild(linea);
+    });
+
+    if (pago.comprobante?.startsWith("PRUEBA_INTERNA/")) {
+      const aviso = document.createElement("p");
+      aviso.textContent = "COMPROBANTE FICTICIO - NO APROBAR";
+      aviso.style.color = "#ff7777";
+      tarjeta.appendChild(aviso);
+    }
+
+    seccionPagos.appendChild(tarjeta);
+  });
+}
+
+document.querySelector(".panel").appendChild(seccionPagos);
+
 
 
       } catch (error) {
